@@ -13,6 +13,7 @@ import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.io.*;
@@ -29,17 +30,18 @@ public class TrelloTest {
     TrelloUtils tu;
     String BoardId;
     List<String> ListsOnBoard;
+
+    @Parameters({"token","apikey"})
     @BeforeClass
-    public void init(){
-        tu=new TrelloUtils();
+    public void init(String token,String apikey){
+        tu=new TrelloUtils(token,apikey);
         BoardId="";
         ListsOnBoard=new ArrayList<>();
     }
 
-
+    @Parameters({"token","apikey"})
     @Test(description = "001.Verify Board Exists",priority = 0)
-    public void verifyGetBoard()  {
-        System.out.println("thread id:" + Thread.currentThread().getId() + "Timestamp :" + LocalDateTime.now());
+    public void verifyGetBoard(String token,String apikey)  {
         Response response=tu.GetTrelloRequest("boards/ieGI2Zmn");
         Reporter.log("made request to default board 'boards/ieGI2Zmn'",true);
         response.then().statusCode(200).log().ifValidationFails(LogDetail.BODY)
@@ -49,7 +51,6 @@ public class TrelloTest {
 
     @Test(description = "002.verify board name is mandatory",priority = 1)
     public void postBoard(){
-        System.out.println("thread id:" + Thread.currentThread().getId() + "Timestamp :" + LocalDateTime.now());
         HashMap<String,Object> CreateBoardMessage=new HashMap<>();
         CreateBoardMessage.put("defaultLists",false);
         Reporter.log("making request to create a board on Trello",true);
@@ -65,7 +66,6 @@ public class TrelloTest {
 
     @Test(description = "003.Verify user is able to create board with Mandatory Field",priority = 2)
     public void postValidBoard(){
-        System.out.println("thread id:" + Thread.currentThread().getId() + "Timestamp :" + LocalDateTime.now());
         HashMap<String,Object> CreateBoardMessage=new HashMap<>();
         CreateBoardMessage.put("name","My Temporary Board");
         CreateBoardMessage.put("defaultLists",true);
@@ -80,7 +80,6 @@ public class TrelloTest {
 
     @Test(description = "004.Verify Lists On Board",priority = 3,dependsOnMethods = "postValidBoard")
     public void getListsOnBoard(){
-        System.out.println("thread id:" + Thread.currentThread().getId() + "Timestamp :" + LocalDateTime.now());
         Response response=tu.GetTrelloRequest("boards/"+BoardId+"/Lists");
         response.then()
                 .statusCode(200)
@@ -95,7 +94,6 @@ public class TrelloTest {
 
     @Test(description = "005.Verify user is able to delete a Board",priority = 4,dependsOnMethods = "postValidBoard")
     public void DeleteValidBoard(){
-        System.out.println("thread id:" + Thread.currentThread().getId() + "Timestamp :" + LocalDateTime.now());
         Response response=tu.DeleteRequest("boards/"+BoardId);
         response.then()
                 .statusCode(200)
@@ -106,7 +104,6 @@ public class TrelloTest {
 
     @Test(description = "006.Verify Board Not Found on Deleting Board",priority = 5,dependsOnMethods = "DeleteValidBoard")
     public void BoardNotFound(){
-        System.out.println("thread id:" + Thread.currentThread().getId() + "Timestamp :" + LocalDateTime.now());
             Response response=tu.GetTrelloRequest("boards/"+BoardId+"/lists");
             response.then()
                     .statusCode(404)
@@ -120,7 +117,6 @@ public class TrelloTest {
 
     @Test(description = "007.Verify Lists are also deleted on deleting the board",priority = 6,dependsOnMethods = "DeleteValidBoard")
     public void ListsAreDeleted(){
-        System.out.println("thread id:" + Thread.currentThread().getId() + "Timestamp :" + LocalDateTime.now());
         for(String list_id:ListsOnBoard){
             Response response=tu.GetTrelloRequest("lists/"+list_id);
             response.then()

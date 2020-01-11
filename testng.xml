@@ -2,6 +2,8 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Trello Sanity Pack">
     <test name="Sanity Testcases">
+        <parameter name="token" value="${token}"/>
+        <parameter name="apikey" value="${apikey}"/>
         <classes>
             <class name="Tests.TrelloTest"/>
         </classes>

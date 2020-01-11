@@ -17,7 +17,7 @@ public class TrelloUtils {
 
     public static RequestSpecification request;
 
-    public TrelloUtils(){
+    public TrelloUtils(String token,String APIKey){
         RequestSpecBuilder requestSpecBuilder=new RequestSpecBuilder();
         PrintStream fileOutPutStream ;
         try {
@@ -28,8 +28,8 @@ public class TrelloUtils {
         RestAssured.config = RestAssured.config().logConfig(new LogConfig().defaultStream(fileOutPutStream));
 
         requestSpecBuilder.setBaseUri("https://api.trello.com/1");
-        requestSpecBuilder.addQueryParam("token","");
-        requestSpecBuilder.addQueryParam("key","");
+        requestSpecBuilder.addQueryParam("token",token);
+        requestSpecBuilder.addQueryParam("key",APIKey);
         requestSpecBuilder.setConfig(RestAssured.config);
         request= RestAssured.given().spec(requestSpecBuilder.build());
     }
