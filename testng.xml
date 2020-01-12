@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Trello Sanity Pack">
+<suite name="Trello Sanity Pack" parallel="methods" thread-count="10">
+    <parameter name="token" value="${token}"/>
+    <parameter name="apikey" value="${apikey}"/>
     <test name="Sanity Testcases">
-        <parameter name="token" value="${token}"/>
-        <parameter name="apikey" value="${apikey}"/>
         <classes>
             <class name="Tests.TrelloTest"/>
+        </classes>
+    </test>
+    <test name="Functional Testcases">
+        <classes>
+            <class name="Tests.TrelloFunctionalTest" />
         </classes>
     </test>
 </suite>

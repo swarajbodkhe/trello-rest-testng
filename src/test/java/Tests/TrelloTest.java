@@ -11,10 +11,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.testng.Assert;
 import org.testng.Reporter;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -32,16 +29,15 @@ public class TrelloTest {
     List<String> ListsOnBoard;
 
     @Parameters({"token","apikey"})
-    @BeforeClass
+    @BeforeTest
     public void init(String token,String apikey){
         tu=new TrelloUtils(token,apikey);
         BoardId="";
         ListsOnBoard=new ArrayList<>();
     }
 
-    @Parameters({"token","apikey"})
     @Test(description = "001.Verify Board Exists",priority = 0)
-    public void verifyGetBoard(String token,String apikey)  {
+    public void verifyGetBoard()  {
         Response response=tu.GetTrelloRequest("boards/ieGI2Zmn");
         Reporter.log("made request to default board 'boards/ieGI2Zmn'",true);
         response.then().statusCode(200).log().ifValidationFails(LogDetail.BODY)

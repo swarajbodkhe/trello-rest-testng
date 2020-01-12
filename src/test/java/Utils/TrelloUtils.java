@@ -52,6 +52,10 @@ public class TrelloUtils {
                 .delete(url);
     }
 
-
+    public Response PostUsingQueryParamRequest(String url,HashMap<String,String> Params){
+        return request.when()
+                .body(Params)
+                .post(url);
+    }
 
 }
