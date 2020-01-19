@@ -3,6 +3,9 @@
 <suite name="Trello Sanity Pack" parallel="methods" thread-count="10">
     <parameter name="token" value="${token}"/>
     <parameter name="apikey" value="${apikey}"/>
+    <listeners>
+        <listener class-name="Utils.TestListener"/>
+    </listeners>
     <test name="Sanity Testcases">
         <classes>
             <class name="Tests.TrelloTest"/>
